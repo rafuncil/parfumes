@@ -1,0 +1,151 @@
+$max-width: 1440px;
+$desktop: 1280px;
+$laptop: 1024px;
+$tablet: 768px;
+$phone: 480px;
+$min-width: 360px;
+
+// colors - роскошная палитра
+$black: #0A0A0A;
+$dark-gold: #B8860B;
+$gold: #D4AF37;
+$light-gold: #F5E6A3;
+$white: #F5F5F5;
+$cream: #FAF6E9;
+$dark-bg: #0D0D0D;
+$card-bg: #141414;
+$border-color: rgba(212, 175, 55, 0.3);
+
+$text-color: $cream;
+$text-secondary: rgba(245, 245, 245, 0.7);
+$bg-color: $dark-bg;
+$decor-color: $gold;
+$accent-color: $gold;
+
+// gradients
+$gold-gradient: linear-gradient(135deg, $gold 0%, $dark-gold 100%);
+$dark-gradient: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+$bg-gradient: radial-gradient(ellipse at top, #1A1A1A 0%, #0A0A0A 100%);
+
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  
+  input {
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.6);
+    color: $text-color;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 12px 20px;
+    border-radius: 50px;
+    appearance: none;
+    font-family: inherit;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(5px);
+    letter-spacing: 0.3px;
+    
+    &:focus {
+      outline: none;
+      border-color: $gold;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+      background: rgba(0, 0, 0, 0.85);
+      transform: translateY(-1px);
+    }
+    
+    &:hover {
+      border-color: rgba(212, 175, 55, 0.6);
+      background: rgba(0, 0, 0, 0.7);
+    }
+    
+    &::placeholder {
+      color: rgba(245, 245, 245, 0.4);
+      font-family: inherit;
+      font-weight: 400;
+    }
+    
+    // Убираем стрелки у number input
+    &[type="number"] {
+      -moz-appearance: textfield;
+      
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+    
+    // Стиль для disabled состояния
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    // Стиль для read-only состояния
+    &:read-only {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(212, 175, 55, 0.15);
+      cursor: default;
+    }
+  }
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  color: rgba(245, 245, 245, 0.7);
+  text-transform: uppercase;
+  margin-left: 16px;
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: $gold;
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+}
+
+.valid {
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+  height: 0;
+  color: #e8a0a0;
+  font-size: 12px;
+  margin-left: 20px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.3px;
+  transform: translateY(-5px);
+  
+  &[data-visible="true"] {
+    padding-top: 6px;
+    opacity: 1;
+    height: 22px;
+    transform: translateY(0);
+    color: #e8a0a0;
+    text-shadow: 0 0 6px rgba(232, 160, 160, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    // Добавляем иконку ошибки
+    &::before {
+      content: '⚠';
+      font-size: 11px;
+      opacity: 0.8;
+    }
+  }
+}

@@ -1,0 +1,432 @@
+// responsive
+$max-width: 1440px;
+$desktop: 1280px;
+$laptop: 1024px;
+$tablet: 768px;
+$phone: 480px;
+$min-width: 360px;
+
+// colors - роскошная палитра
+$black: #0A0A0A;
+$dark-gold: #B8860B;
+$gold: #D4AF37;
+$light-gold: #F5E6A3;
+$white: #F5F5F5;
+$cream: #FAF6E9;
+$dark-bg: #0D0D0D;
+$card-bg: #141414;
+$border-color: rgba(212, 175, 55, 0.3);
+
+$text-color: $cream;
+$text-secondary: rgba(245, 245, 245, 0.7);
+$bg-color: $dark-bg;
+$decor-color: $gold;
+$accent-color: $gold;
+
+// gradients
+$gold-gradient: linear-gradient(135deg, $gold 0%, $dark-gold 100%);
+$dark-gradient: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+$bg-gradient: radial-gradient(ellipse at top, #1A1A1A 0%, #0A0A0A 100%);
+
+body {
+	background: $bg-gradient;
+	color: $text-color;
+	font-family: 'Playfair Display', 'Times New Roman', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', serif;
+	font-size: 16px;
+	position: relative;
+	overflow-x: hidden;
+	min-height: 100vh;
+	
+	&::before {
+		content: '';
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><path fill="%23D4AF37" d="M50,15 L60,35 L82,38 L67,52 L71,74 L50,63 L29,74 L33,52 L18,38 L40,35 Z"/></svg>');
+		background-size: 50px;
+		background-repeat: repeat;
+		pointer-events: none;
+		z-index: 0;
+	}
+}
+
+h1 {
+	text-align: center;
+	font-size: clamp(24px, 6vw, 32px);
+	font-weight: 600;
+	letter-spacing: 2px;
+	background: $gold-gradient;
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	// margin-bottom: 30px;
+	position: relative;
+	word-break: keep-all;
+	white-space: nowrap;
+	
+	@media (max-width: $phone) {
+		white-space: normal;
+		letter-spacing: 1px;
+		
+		&::after {
+			font-size: 18px;
+			margin-top: 8px;
+		}
+	}
+	
+	&::after {
+		content: '✧';
+		display: block;
+		color: $gold;
+		font-size: clamp(18px, 4vw, 24px);
+		margin-top: 10px;
+		opacity: 0.6;
+	}
+}
+
+.form-block {
+	width: 100%;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 40px 20px;
+	position: relative;
+	
+	[alt="logo"] {
+		position: absolute;
+		left: 50%;
+		top: 30px;
+		transform: translateX(-50%);
+		width: min(180px, 40vw);
+		filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.3));
+	}
+}
+
+.form {
+	width: clamp(320px, 100%, 650px);
+	padding: clamp(20px, 5vw, 40px);
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	z-index: 1;
+	position: relative;
+	background: rgba(20, 20, 20, 0.8);
+	backdrop-filter: blur(10px);
+	border-radius: 30px;
+	border: 1px solid $border-color;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 55, 0.1) inset;
+}
+
+.btn {
+	padding: 14px 28px;
+	color: $dark-bg;
+	background: $gold-gradient;
+	border: none;
+	margin-top: 20px;
+	font-size: 18px;
+	border-radius: 50px;
+	font-weight: 600;
+	letter-spacing: 1px;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	max-width: 280px;
+	align-self: center;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+	
+	&::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 0;
+		height: 0;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.3);
+		transform: translate(-50%, -50%);
+		transition: width 0.6s, height 0.6s;
+	}
+	
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+		
+		&::before {
+			width: 300px;
+			height: 300px;
+		}
+	}
+	
+	&:active {
+		transform: translateY(0);
+	}
+}
+
+.btn img {
+	width: 22px;
+	height: 22px;
+	margin-left: 12px;
+	filter: brightness(0);
+	position: relative;
+	z-index: 1;
+}
+
+.final-info {
+	display: flex;
+	flex-direction: column;
+	border-radius: 20px;
+	font-size: 16px;
+	gap: 12px;
+	background: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(10px);
+	padding: 25px;
+	border: 1px solid $border-color;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transform: translateY(10px);
+	transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+	&.visible {
+		opacity: 1;
+		max-height: 600px;
+		transform: translateY(0);
+		margin-top: 10px;
+	}
+	 
+	p {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 8px 0;
+		border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+		margin: 0;
+		
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+
+	span {
+		font-size: 1.3em;
+		font-weight: 600;
+		color: $gold;
+		font-family: monospace;
+	}
+}
+
+input[type="range"] {
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: transparent;
+	height: 30px;
+	width: 100%;
+	
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		width: 22px;
+		height: 22px;
+		border-radius: 50%;
+		cursor: pointer;
+		background: $gold-gradient;
+		translate: 0 -40%;
+		transition: all 0.2s ease;
+		box-shadow: 0 2px 8px rgba(212, 175, 55, 0.5);
+		
+		&:hover {
+			transform: scale(1.2);
+			translate: 0 -30%;
+		}
+	}
+
+	&::-webkit-slider-runnable-track {
+		background: rgba(212, 175, 55, 0.2);
+		height: 6px;
+		border-radius: 3px;
+	}
+}
+
+input,
+select,
+textarea,
+button {
+	font-size: 16px;
+	font-family: inherit;
+}
+
+// Кастомные стили для Input компонента
+input[type="number"],
+input[type="text"] {
+	background: rgba(0, 0, 0, 0.6);
+	border: 1px solid $border-color;
+	border-radius: 12px;
+	padding: 12px 16px;
+	color: $text-color;
+	font-size: 16px;
+	transition: all 0.3s ease;
+	
+	&:focus {
+		outline: none;
+		border-color: $gold;
+		box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+		background: rgba(0, 0, 0, 0.8);
+	}
+	
+	&::placeholder {
+		color: $text-secondary;
+	}
+}
+
+.payment-section {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.payment-label {
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	color: $text-secondary;
+	margin-bottom: -4px;
+	font-size: 14px;
+	text-transform: uppercase;
+}
+
+.paymentType {
+	position: relative;
+	display: inline-flex;
+	background: rgba(0, 0, 0, 0.6);
+	border-radius: 50px;
+	border: 1px solid $border-color;
+	font-size: 15px;
+	gap: 0;
+	overflow: hidden;
+	user-select: none;
+	height: 52px;
+	width: 100%;
+}
+
+.paymentType label {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 20px;
+	cursor: pointer;
+	z-index: 2;
+	font-weight: 500;
+	color: $text-secondary;
+	transition: all 0.3s ease;
+	flex: 1;
+	font-size: 15px;
+	letter-spacing: 0.5px;
+}
+
+.paymentType input[type="radio"] {
+	display: none;
+}
+
+.slider-track {
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	width: calc(50% - 4px);
+	height: calc(100% - 8px);
+	background: $gold-gradient;
+	border-radius: 50px;
+	transition: transform 0.3s cubic-bezier(0.34, 1.26, 0.64, 1);
+	box-shadow: 0 2px 12px rgba(212, 175, 55, 0.4);
+	z-index: 1;
+}
+
+#nal:checked ~ .slider-track {
+	transform: translateX(0%);
+}
+
+#beznal:checked ~ .slider-track {
+	transform: translateX(100%);
+}
+
+#nal:checked ~ label[for="nal"] span,
+#beznal:checked ~ label[for="beznal"] span {
+	color: $dark-bg;
+	opacity: 1;
+	font-weight: 600;
+}
+
+.paymentType label span {
+	opacity: 0.8;
+	transition: all 0.3s ease;
+	position: relative;
+	z-index: 2;
+}
+
+.paymentType label:hover span {
+	opacity: 1;
+	color: $gold;
+}
+
+// Адаптивность
+@media (max-width: $tablet) {
+	.form {
+		padding: 30px 20px;
+		gap: 16px;
+	}
+	
+	h1 {
+		font-size: clamp(22px, 5vw, 28px);
+	}
+	
+	.paymentType label {
+		padding: 10px 16px;
+		font-size: 14px;
+	}
+	
+	.final-info {
+		padding: 20px;
+		
+		p {
+			font-size: 14px;
+		}
+		
+		span {
+			font-size: 1.2em;
+		}
+	}
+}
+
+@media (max-width: $phone) {
+	.form {
+		padding: 20px 16px;
+	}
+	
+	h1 {
+		font-size: clamp(20px, 4.5vw, 24px);
+		white-space: normal;
+		line-height: 1.3;
+		
+		&::after {
+			font-size: 16px;
+			margin-top: 6px;
+		}
+	}
+	
+	.paymentType label {
+		min-width: 100px;
+		padding: 8px 12px;
+		font-size: 13px;
+	}
+	
+	.btn {
+		font-size: 16px;
+		padding: 12px 24px;
+	}
+}
