@@ -19,7 +19,7 @@ export default async function RootLayout({
     {/* <html lang="ru" className={fonts.join(' ')}> */}
     <html lang="ru">
       <head>
-        <link rel="icon" type="image/svg" href="/images/icon.svg" />
+        <link rel="icon" href="/images/icon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet"></link>
