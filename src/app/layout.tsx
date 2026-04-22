@@ -6,8 +6,8 @@ import { Toaster } from 'sonner'
 
 
 export const metadata: Metadata = {
-  title: "NajmLabs | Cтудия разработки IT-продуктов",
-  description: "Разработка корпоративных сайтов, бизнес-приложений, создание игровых проектов и профессиональный дизайн.",
+  title: "Cube-Parfumes",
+  description: "Самые бомбовые духи Нальчика",
 };
 
 export default async function RootLayout({
