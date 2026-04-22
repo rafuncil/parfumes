@@ -68,15 +68,18 @@ const Home: React.FC = () => {
     options: [manualOption]
   };
 
-  // Преобразуем JSON в формат для React Select с группировкой
   const fullOptions: GroupedOption[] = [
-    ...(rawData as JsonGroup[]).map(group => ({
-      label: group.label,
-      options: group.options.map((item: any) => ({
-        value: item.value,
-        label: `${item.label} — ${item.count} шт.`
+    ...(rawData as JsonGroup[])
+      .map(group => ({
+        label: group.label,
+        options: group.options
+          .filter((item: any) => item.count !== 0) // Фильтруем товары с count = 0
+          .map((item: any) => ({
+            value: item.value,
+            label: `${item.label} — ${item.count} шт.`
+          }))
       }))
-    })),
+      .filter(group => group.options.length > 0), // Удаляем группы, в которых не осталось товаров
     manualOptionGroup
   ];
 
