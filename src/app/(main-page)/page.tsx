@@ -174,7 +174,7 @@ const Home: React.FC = () => {
     const paymentNum = payment || 0;
 
     let paymentTypeRate = paymentType == "beznal" ? 1.10 : 1;
-    let rate = 0.05;
+    let rate = 0.04;
     let credit = priceNum - paymentNum;
     let overCredit = Math.round(credit * (1 + rate * time) / 100 * paymentTypeRate) * 100;
     let monthlyPayment = Math.round(overCredit / time / 10) * 10;

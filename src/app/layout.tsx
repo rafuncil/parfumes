@@ -6,8 +6,8 @@ import { Toaster } from 'sonner'
 
 
 export const metadata: Metadata = {
-  title: "Cube-Parfumes",
-  description: "Самые бомбовые духи Нальчика",
+  title: "Mason A.",
+  description: "Оригинальный парфюм по лучшим ценам",
 };
 
 export default async function RootLayout({
