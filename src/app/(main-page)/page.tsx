@@ -255,7 +255,7 @@ const Home: React.FC = () => {
             styles={customSelectStyles as CustomStyles}
             options={fullOptions}
             value={selectedOption}
-            isSearchable={true}
+            isSearchable={false}
             placeholder="— Выберите —"
           />
 
