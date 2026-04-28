@@ -47,6 +47,7 @@
 		"search.exclude": {
 			"**/node_modules": true,
 			"**/.next": true
-		}
+		},
+		"liveServer.settings.multiRootWorkspaceName": "⚙️ CONFIG-FILES"
 	}
 }

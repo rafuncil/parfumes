@@ -5,7 +5,11 @@ import Select, { StylesConfig, GroupBase } from 'react-select';
 import { customSelectStyles } from '@/scripts';
 import cls from './style.module.scss';
 import { Input } from '@/components/ui';
-import rawData from '&/data/products_full.json';
+// import rawData from '&/data/products_full.json';
+
+
+const fetchURL = 'https://script.google.com/macros/s/AKfycbxduzm1ez4vnotAzLYEBZRra8VBsy7LG4qoFVU7cJWe2A-SrHiLbyyFT1D-pdeHrxs/exec';
+
 
 // Тип для опции товара
 interface ProductOption {
@@ -55,6 +59,8 @@ const Home: React.FC = () => {
   const [time, setTime] = useState<number>(6);
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [showPriceField, setShowPriceField] = useState<boolean>(false);
+  const [isLoad, isLoadSetter] = useState(true);
+  const [rawData, rowDataSetter] = useState([])
 
   const [monthlyPrice, setMonthlyPrice] = useState<string>('');
   const [totalPrice, setTotalPrice] = useState<string>('');
@@ -84,6 +90,25 @@ const Home: React.FC = () => {
   ];
 
   const firstPaymentRate: number = 0; // Изменено: процент первоначального взноса 0%
+
+
+  const req = async () => {
+    isLoadSetter(true);
+    try {
+      const fetchData = await fetch(fetchURL);
+      const jsonData = await fetchData.json();
+      rowDataSetter(jsonData)
+    } catch (error) {
+      console.log(error)
+    }
+    finally {
+      isLoadSetter(false)
+    }
+  }
+
+  useEffect(() => {
+    req()
+  }, [])
 
   const sendReq = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

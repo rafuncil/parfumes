@@ -28,6 +28,11 @@ $gold-gradient: linear-gradient(135deg, $gold 0%, $dark-gold 100%);
 $dark-gradient: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
 $bg-gradient: radial-gradient(ellipse at top, #1A1A1A 0%, #0A0A0A 100%);
 
+
+html{
+	overflow: hidden;
+}
+
 body {
 	background: $bg-gradient;
 	color: $text-color;
@@ -35,7 +40,8 @@ body {
 	font-size: 16px;
 	position: relative;
 	overflow-x: hidden;
-	min-height: 100vh;
+	overflow-y: auto;
+	height: 100dvh;
 	
 	&::before {
 		content: '';
@@ -117,7 +123,8 @@ h1 {
 	backdrop-filter: blur(10px);
 	border-radius: 30px;
 	border: 1px solid $border-color;
-	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 55, 0.1) inset;
+	box-shadow: 0 0px 15px $border-color;
+
 }
 
 .btn {
