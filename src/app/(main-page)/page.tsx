@@ -201,7 +201,7 @@ const Home: React.FC = () => {
     let paymentTypeRate = paymentType == "beznal" ? 1.10 : 1;
     let totalPrice = (priceNum - paymentNum) * paymentTypeRate + paymentNum;
     //let credit = (priceNum - paymentNum);
-    let monthlyPayment = Math.round((priceNum - paymentNum)  / time );
+    let monthlyPayment = Math.round((totalPrice - paymentNum)  / time );
     
     setMonthlyPrice(monthlyPayment.toLocaleString('ru-RU') + ' ₽');
     setTotalPrice(totalPrice.toLocaleString('ru-RU') + ' ₽');
