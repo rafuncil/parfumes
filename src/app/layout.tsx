@@ -6,7 +6,7 @@ import { Toaster } from 'sonner'
 
 
 export const metadata: Metadata = {
-  title: "Mason A.",
+  title: "Maison A.",
   description: "Оригинальный парфюм по лучшим ценам",
 };
 
