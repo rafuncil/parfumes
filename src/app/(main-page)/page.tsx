@@ -56,7 +56,7 @@ const Home: React.FC = () => {
   const [paymentType, setPaymentType] = useState<string>("nal");
   const [productName, setProductName] = useState<string | null>(null);
   const [payment, setPayment] = useState<number | null>(0); // Изменено: начальное значение 0
-  const [time, setTime] = useState<number>(6);
+  const [time, setTime] = useState<number>(3);
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [showPriceField, setShowPriceField] = useState<boolean>(false);
   const [isLoad, isLoadSetter] = useState(true);
@@ -199,14 +199,11 @@ const Home: React.FC = () => {
     const paymentNum = payment || 0;
 
     let paymentTypeRate = paymentType == "beznal" ? 1.10 : 1;
-    let rate = 0.04;
     let credit = priceNum - paymentNum;
-    let overCredit = Math.round(credit * (1 + rate * time) / 100 * paymentTypeRate) * 100;
-    let monthlyPayment = Math.round(overCredit / time / 10) * 10;
+    let monthlyPayment = Math.round(credit / time * paymentTypeRate);
 
     setMonthlyPrice(monthlyPayment.toLocaleString('ru-RU') + ' ₽');
-    setTotalPrice(Math.round(monthlyPayment * time + paymentNum).toLocaleString('ru-RU') + ' ₽');
-    setOverPrice(Math.round(paymentNum).toLocaleString('ru-RU') + ' ₽');
+    setTotalPrice(priceNum.toLocaleString('ru-RU') + ' ₽');
   }, [time, payment, price, paymentType]);
 
   const handlePaymentType = (e: ChangeEvent<HTMLInputElement>) => {
@@ -240,7 +237,7 @@ const Home: React.FC = () => {
     step: 1,
     name: 'monthCount',
     min: 3,
-    max: 12,
+    max: 6,
     value: time,
     onChange: (e: ChangeEvent<HTMLInputElement>) => setTime(Number(e.target.value))
   };
@@ -286,8 +283,8 @@ const Home: React.FC = () => {
             name='months'
             onValid={setValid}
             title="Срок рассрочки (мес.)"
-            min={1} // Изменено: минимум 1 месяц
-            max={12}
+            min={3} // Изменено: минимум 1 месяц
+            max={6}
             placeholder=''
             type='number'
             value={time}
@@ -325,7 +322,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className={`final-info ${showInfo ? 'visible' : 'hidden'}`}>
-            <p>Первоначальный взнос: <span>{overPrice}</span></p>
+            <p>Первоначальный взнос: <span>{(payment?.toLocaleString('ru-RU') + ' ₽')}</span></p>
             <p>Срок рассрочки: <span>{time + ' мес'}</span></p>
             <p>Ежемесячный платеж: <span>{monthlyPrice}</span></p>
             <p>Общая стоимость: <span>{totalPrice}</span></p>
