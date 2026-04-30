@@ -199,11 +199,12 @@ const Home: React.FC = () => {
     const paymentNum = payment || 0;
 
     let paymentTypeRate = paymentType == "beznal" ? 1.10 : 1;
-    let credit = priceNum - paymentNum;
-    let monthlyPayment = Math.round(credit / time * paymentTypeRate);
-
+    let totalPrice = (priceNum - paymentNum) * paymentTypeRate + paymentNum;
+    //let credit = (priceNum - paymentNum);
+    let monthlyPayment = Math.round((priceNum - paymentNum)  / time );
+    
     setMonthlyPrice(monthlyPayment.toLocaleString('ru-RU') + ' ₽');
-    setTotalPrice(priceNum.toLocaleString('ru-RU') + ' ₽');
+    setTotalPrice(totalPrice.toLocaleString('ru-RU') + ' ₽');
   }, [time, payment, price, paymentType]);
 
   const handlePaymentType = (e: ChangeEvent<HTMLInputElement>) => {
@@ -236,7 +237,7 @@ const Home: React.FC = () => {
   const rangeMonthOps = {
     step: 1,
     name: 'monthCount',
-    min: 3,
+    min: 1,
     max: 6,
     value: time,
     onChange: (e: ChangeEvent<HTMLInputElement>) => setTime(Number(e.target.value))
@@ -283,7 +284,7 @@ const Home: React.FC = () => {
             name='months'
             onValid={setValid}
             title="Срок рассрочки (мес.)"
-            min={3} // Изменено: минимум 1 месяц
+            min={1} // Изменено: минимум 1 месяц
             max={6}
             placeholder=''
             type='number'

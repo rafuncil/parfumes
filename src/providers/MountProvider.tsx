@@ -162,7 +162,7 @@ const Loader = () => {
 export const MountProvider = ({ children }: { children?: ReactNode }) => {
 	const [showContent, setShowContent] = useState(false);
 	const [renderContent, setRenderContent] = useState(false);
-	const timeout = process.env.NODE_ENV === 'production' ? 2000 : 100;
+	const timeout = process.env.NODE_ENV === 'production' ? 4000 : 4000;
 
 	useEffect(() => {
 		setRenderContent(true);
