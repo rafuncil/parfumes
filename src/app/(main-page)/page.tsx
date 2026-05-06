@@ -68,7 +68,7 @@ const Home: React.FC = () => {
 
   const [monthlyPrice, setMonthlyPrice] = useState<string>('');
   const [totalPrice, setTotalPrice] = useState<string>('');
-  const [overPrice, setOverPrice] = useState<string>('');
+  // const [overPrice, setOverPrice] = useState<string>('');
 
   const [valid, setValid] = useState<ValidationItem[]>([]);
 
@@ -133,9 +133,10 @@ const Home: React.FC = () => {
       • Способ оплаты: ${paymentType == 'nal' ? "Наличный" : "Безналичный"}
       • Платёж в месяц: ${monthlyPrice} 
       • Общая стоимость: ${totalPrice}
-      • Цена за 1 мл: ${getPricePerMl() !== null 
-                ? getPricePerMl()?.toLocaleString('ru-RU', { minimumFractionDigits: 0 }) + ' ₽'
+      • Цена за 1 мл: ${pricePerVolume !== null 
+                ? pricePerVolume.toLocaleString('ru-RU', { minimumFractionDigits: 0 }) + ' ₽'
                 : '—'}`;
+
 
     const link = document.createElement('a');
     link.href = `https://wa.me/79627721490?text=${encodeURIComponent(message)}`;
@@ -159,11 +160,6 @@ const Home: React.FC = () => {
     setPrice(e.value);
     setPayment(0); // При выборе товара первоначальный взнос = 0
     setProductName(e.label);
-    // if (e.volume && e.volume > 0) {
-    //   setPricePerVolume(e.value / e.volume);
-    // } else {
-    //   setPricePerVolume(null);
-    // }
     setSelectedOption(e);
     setShowInfo(true);
     setShowPriceField(false);
@@ -178,6 +174,7 @@ const Home: React.FC = () => {
   const isOptionSelected = (option: OptionType): boolean => {
     return selectedOption ? selectedOption.label === option.label : false;
   };
+
 
   useEffect(() => {
     if (
@@ -217,15 +214,24 @@ const Home: React.FC = () => {
   useEffect(() => {
     const priceNum = price || 0;
     const paymentNum = payment || 0;
+    const paymentTypeRate = paymentType == "beznal" ? 1.10 : 1;
 
-    let paymentTypeRate = paymentType == "beznal" ? 1.10 : 1;
     let totalPrice = (priceNum - paymentNum) * paymentTypeRate + paymentNum;
-    //let credit = (priceNum - paymentNum);
     let monthlyPayment = Math.round((totalPrice - paymentNum)  / time );
     
     setMonthlyPrice(monthlyPayment.toLocaleString('ru-RU') + ' ₽');
     setTotalPrice(totalPrice.toLocaleString('ru-RU') + ' ₽');
-  }, [time, payment, price, paymentType]);
+
+    // Расчет цены за мл с учетом коэффициента
+    if (selectedOption && selectedOption.value !== null && selectedOption.volume && selectedOption.volume > 0) {
+      const pricePerMl = selectedOption.value / selectedOption.volume;
+      // Применяем коэффициент к цене за мл
+      const calculatedPricePerMl = Math.ceil(pricePerMl * paymentTypeRate / 10) * 10;
+      setPricePerVolume(calculatedPricePerMl);
+    } else {
+      setPricePerVolume(null);
+    }
+  }, [time, payment, price, paymentType, selectedOption]);
 
   const handlePaymentType = (e: ChangeEvent<HTMLInputElement>) => {
     let _value = e.target.value;
@@ -348,8 +354,8 @@ const Home: React.FC = () => {
             <p>Ежемесячный платеж: <span>{monthlyPrice}</span></p>
             <p>Общая стоимость: <span>{totalPrice}</span></p>
             <p>Стоимость 1 мл: <span>
-              {getPricePerMl() !== null 
-                ? getPricePerMl()?.toLocaleString('ru-RU', { minimumFractionDigits: 0 }) + ' ₽'
+              {pricePerVolume !== null 
+                ? pricePerVolume.toLocaleString('ru-RU', { minimumFractionDigits: 0 }) + ' ₽'
                 : '—'}</span></p>
           </div>
 
