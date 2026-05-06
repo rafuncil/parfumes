@@ -15,6 +15,7 @@ const fetchURL = 'https://script.google.com/macros/s/AKfycbxduzm1ez4vnotAzLYEBZR
 interface ProductOption {
   value: number;
   label: string;
+  volume: number;
 }
 
 // Тип для группы опций из JSON
@@ -23,6 +24,7 @@ interface JsonGroup {
   options: Array<{
     label: string;
     value: number;
+    volume: number;
   }>;
 }
 
@@ -30,6 +32,7 @@ interface JsonGroup {
 interface ManualOption {
   value: null;
   label: string;
+  volume: null;
 }
 
 // Объединенный тип для опций
@@ -53,6 +56,7 @@ type CustomStyles = StylesConfig<OptionType, false, GroupBase<OptionType>>;
 const Home: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const [price, setPrice] = useState<number | null>(null);
+  const [pricePerVolume, setPricePerVolume] = useState<number | null>(null);
   const [paymentType, setPaymentType] = useState<string>("nal");
   const [productName, setProductName] = useState<string | null>(null);
   const [payment, setPayment] = useState<number | null>(0); // Изменено: начальное значение 0
@@ -68,7 +72,7 @@ const Home: React.FC = () => {
 
   const [valid, setValid] = useState<ValidationItem[]>([]);
 
-  const manualOption: ManualOption = { label: 'Другой товар', value: null };
+  const manualOption: ManualOption = { label: 'Другой товар', value: null, volume: null };
   const manualOptionGroup: GroupedOption = {
     label: '—',
     options: [manualOption]
@@ -82,7 +86,8 @@ const Home: React.FC = () => {
           .filter((item: any) => item.count !== 0) // Фильтруем товары с count = 0
           .map((item: any) => ({
             value: item.value,
-            label: `${item.label} — ${item.count} шт.`
+            label: `${item.label} — ${item.count} шт.`,
+            volume: item.volumes
           }))
       }))
       .filter(group => group.options.length > 0), // Удаляем группы, в которых не осталось товаров
@@ -127,7 +132,10 @@ const Home: React.FC = () => {
       • Срок: ${time} мес.
       • Способ оплаты: ${paymentType == 'nal' ? "Наличный" : "Безналичный"}
       • Платёж в месяц: ${monthlyPrice} 
-      • Общая стоимость: ${totalPrice}`;
+      • Общая стоимость: ${totalPrice}
+      • Цена за 1 мл: ${getPricePerMl() !== null 
+                ? getPricePerMl()?.toLocaleString('ru-RU', { minimumFractionDigits: 0 }) + ' ₽'
+                : '—'}`;
 
     const link = document.createElement('a');
     link.href = `https://wa.me/79627721490?text=${encodeURIComponent(message)}`;
@@ -143,6 +151,7 @@ const Home: React.FC = () => {
       setProductName(manualOption.label);
       setShowPriceField(true);
       setPrice(null);
+      setPricePerVolume(null);
       setPayment(0); // Сбрасываем первоначальный взнос в 0
       return;
     }
@@ -150,9 +159,20 @@ const Home: React.FC = () => {
     setPrice(e.value);
     setPayment(0); // При выборе товара первоначальный взнос = 0
     setProductName(e.label);
+    // if (e.volume && e.volume > 0) {
+    //   setPricePerVolume(e.value / e.volume);
+    // } else {
+    //   setPricePerVolume(null);
+    // }
     setSelectedOption(e);
     setShowInfo(true);
     setShowPriceField(false);
+  };
+
+  const getPricePerMl = () => {
+  if (!selectedOption || selectedOption.value === null) return null;
+  if (!selectedOption.volume || selectedOption.volume === 0) return null;
+  return Math.ceil(selectedOption.value / selectedOption.volume / 10) * 10;
   };
 
   const isOptionSelected = (option: OptionType): boolean => {
@@ -327,6 +347,10 @@ const Home: React.FC = () => {
             <p>Срок рассрочки: <span>{time + ' мес'}</span></p>
             <p>Ежемесячный платеж: <span>{monthlyPrice}</span></p>
             <p>Общая стоимость: <span>{totalPrice}</span></p>
+            <p>Стоимость 1 мл: <span>
+              {getPricePerMl() !== null 
+                ? getPricePerMl()?.toLocaleString('ru-RU', { minimumFractionDigits: 0 }) + ' ₽'
+                : '—'}</span></p>
           </div>
 
           <button type='submit' className='btn'>
