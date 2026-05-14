@@ -1,15 +1,12 @@
 'use client'
 
 import React, { useEffect, useState, FormEvent, ChangeEvent } from 'react';
-import Select, { StylesConfig, GroupBase } from 'react-select';
+import Select, { components } from 'react-select';
 import { customSelectStyles } from '@/scripts';
 import cls from './style.module.scss';
 import { Input } from '@/components/ui';
-// import rawData from '&/data/products_full.json';
-
 
 const fetchURL = 'https://script.google.com/macros/s/AKfycbxduzm1ez4vnotAzLYEBZRra8VBsy7LG4qoFVU7cJWe2A-SrHiLbyyFT1D-pdeHrxs/exec';
-
 
 // Тип для опции товара
 interface ProductOption {
@@ -50,8 +47,26 @@ interface ValidationItem {
   valid: boolean;
 }
 
-// Кастомный тип для стилей
-type CustomStyles = StylesConfig<OptionType, false, GroupBase<OptionType>>;
+// Кастомный MenuList для автоматической прокрутки к выбранному элементу
+const CustomMenuList = (props: any) => {
+  const { children, selectProps } = props;
+  
+  React.useEffect(() => {
+    if (selectProps.menuIsOpen) {
+      setTimeout(() => {
+        const selectedElement = document.querySelector('.select__option--is-selected');
+        if (selectedElement) {
+          selectedElement.scrollIntoView({
+            block: 'center',
+            behavior: 'smooth'
+          });
+        }
+      }, 50);
+    }
+  }, [selectProps.menuIsOpen, selectProps.value]);
+  
+  return <components.MenuList {...props}>{children}</components.MenuList>;
+};
 
 const Home: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
@@ -59,7 +74,7 @@ const Home: React.FC = () => {
   const [pricePerVolume, setPricePerVolume] = useState<number | null>(null);
   const [paymentType, setPaymentType] = useState<string>("nal");
   const [productName, setProductName] = useState<string | null>(null);
-  const [payment, setPayment] = useState<number | null>(0); // Изменено: начальное значение 0
+  const [payment, setPayment] = useState<number | null>(0);
   const [time, setTime] = useState<number>(3);
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [showPriceField, setShowPriceField] = useState<boolean>(false);
@@ -68,7 +83,6 @@ const Home: React.FC = () => {
 
   const [monthlyPrice, setMonthlyPrice] = useState<string>('');
   const [totalPrice, setTotalPrice] = useState<string>('');
-  // const [overPrice, setOverPrice] = useState<string>('');
 
   const [valid, setValid] = useState<ValidationItem[]>([]);
 
@@ -83,19 +97,26 @@ const Home: React.FC = () => {
       .map(group => ({
         label: group.label,
         options: group.options
-          .filter((item: any) => item.count !== 0) // Фильтруем товары с count = 0
+          .filter((item: any) => item.count !== 0)
           .map((item: any) => ({
             value: item.value,
             label: `${item.label} — ${item.count} шт.`,
             volume: item.volumes
           }))
       }))
-      .filter(group => group.options.length > 0), // Удаляем группы, в которых не осталось товаров
+      .filter(group => group.options.length > 0),
     manualOptionGroup
   ];
 
-  const firstPaymentRate: number = 0; // Изменено: процент первоначального взноса 0%
-
+  const isOptionSelected = (option: OptionType): boolean => {
+    if (!selectedOption) return false;
+    
+    if (selectedOption.value === null && option.value === null) {
+      return selectedOption.label === option.label;
+    }
+    
+    return selectedOption.value === option.value;
+  };
 
   const req = async () => {
     isLoadSetter(true);
@@ -137,7 +158,6 @@ const Home: React.FC = () => {
                 ? pricePerVolume.toLocaleString('ru-RU', { minimumFractionDigits: 0 }) + ' ₽'
                 : '—'}`;
 
-
     const link = document.createElement('a');
     link.href = `https://wa.me/79627721490?text=${encodeURIComponent(message)}`;
     link.target = '_blank';
@@ -153,28 +173,17 @@ const Home: React.FC = () => {
       setShowPriceField(true);
       setPrice(null);
       setPricePerVolume(null);
-      setPayment(0); // Сбрасываем первоначальный взнос в 0
+      setPayment(0);
       return;
     }
 
     setPrice(e.value);
-    setPayment(0); // При выборе товара первоначальный взнос = 0
+    setPayment(0);
     setProductName(e.label);
     setSelectedOption(e);
     setShowInfo(true);
     setShowPriceField(false);
   };
-
-  const getPricePerMl = () => {
-  if (!selectedOption || selectedOption.value === null) return null;
-  if (!selectedOption.volume || selectedOption.volume === 0) return null;
-  return Math.ceil(selectedOption.value / selectedOption.volume / 10) * 10;
-  };
-
-  const isOptionSelected = (option: OptionType): boolean => {
-    return selectedOption ? selectedOption.label === option.label : false;
-  };
-
 
   useEffect(() => {
     if (
@@ -191,7 +200,7 @@ const Home: React.FC = () => {
     }
 
     if (price) {
-      const newMin = 0; // Минимальный взнос - 0
+      const newMin = 0;
       const newMax = Math.ceil(price / 1000) * 1000;
 
       if (payment === null || payment < newMin || payment > newMax) {
@@ -215,17 +224,15 @@ const Home: React.FC = () => {
     const priceNum = price || 0;
     const paymentNum = payment || 0;
     const paymentTypeRate = paymentType == "beznal" ? 1.10 : 1;
-
-    let totalPrice = (priceNum - paymentNum) * paymentTypeRate + paymentNum;
-    let monthlyPayment = Math.round((totalPrice - paymentNum)  / time );
     
-    setMonthlyPrice(monthlyPayment.toLocaleString('ru-RU') + ' ₽');
-    setTotalPrice(totalPrice.toLocaleString('ru-RU') + ' ₽');
-
-    // Расчет цены за мл с учетом коэффициента
+    let totalPriceValue = ((Math.ceil(priceNum * 15 / 16 / 60) * 60)  - paymentNum) * paymentTypeRate + paymentNum;
+    let monthlyPaymentValue = Math.round((totalPriceValue - paymentNum) / time);
+    
+    setMonthlyPrice(monthlyPaymentValue.toLocaleString('ru-RU') + ' ₽');
+    setTotalPrice(totalPriceValue.toLocaleString('ru-RU') + ' ₽');
+    
     if (selectedOption && selectedOption.value !== null && selectedOption.volume && selectedOption.volume > 0) {
       const pricePerMl = selectedOption.value / selectedOption.volume;
-      // Применяем коэффициент к цене за мл
       const calculatedPricePerMl = Math.ceil(pricePerMl * paymentTypeRate / 10) * 10;
       setPricePerVolume(calculatedPricePerMl);
     } else {
@@ -242,7 +249,7 @@ const Home: React.FC = () => {
     step: 1000,
     name: 'downPayment',
     max: Math.ceil((price || 0) / 1000) * 1000,
-    min: 0, // Минимум 0
+    min: 0,
     value: payment || 0,
     onChange: (e: ChangeEvent<HTMLInputElement>) => {
       let step = 1000;
@@ -276,11 +283,14 @@ const Home: React.FC = () => {
           <h1>Калькулятор рассрочки</h1>
           <Select
             onChange={selectChange}
-            styles={customSelectStyles as CustomStyles}
+            styles={customSelectStyles}
             options={fullOptions}
             value={selectedOption}
             isSearchable={false}
+            isOptionSelected={isOptionSelected}
             placeholder="— Выберите —"
+            classNamePrefix="select"
+            components={{ MenuList: CustomMenuList }}
           />
 
           {showPriceField && (
@@ -298,7 +308,7 @@ const Home: React.FC = () => {
             name='payment'
             onValid={setValid}
             title="Первоначальный взнос (₽)"
-            min={0} // Минимум 0
+            min={0}
             max={price || 0}
             type='number'
             value={payment !== null ? payment : 0}
@@ -310,7 +320,7 @@ const Home: React.FC = () => {
             name='months'
             onValid={setValid}
             title="Срок рассрочки (мес.)"
-            min={1} // Изменено: минимум 1 месяц
+            min={1}
             max={6}
             placeholder=''
             type='number'

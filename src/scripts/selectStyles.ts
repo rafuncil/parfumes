@@ -1,12 +1,5 @@
-import { StylesConfig } from 'react-select';
-
-interface OptionType {
-	value: string | number;
-	label: string;
-}
-
-export const customSelectStyles: StylesConfig<OptionType, boolean> = {
-	control: (provided, state) => ({
+export const customSelectStyles = {
+	control: (provided: any, state: any) => ({
 		...provided,
 		minHeight: '48px',
 		border: state.isFocused
@@ -26,13 +19,13 @@ export const customSelectStyles: StylesConfig<OptionType, boolean> = {
 			backgroundColor: 'rgba(0, 0, 0, 0.7)',
 		}
 	}),
-	input: (provided) => ({
+	input: (provided: any) => ({
 		...provided,
 		color: '#F5F5F5',
 		fontSize: '16px',
 		fontFamily: 'inherit',
 	}),
-	option: (provided, state) => ({
+	option: (provided: any, state: any) => ({
 		...provided,
 		padding: '12px 20px',
 		backgroundColor: state.isSelected
@@ -50,7 +43,7 @@ export const customSelectStyles: StylesConfig<OptionType, boolean> = {
 			backgroundColor: 'rgba(212, 175, 55, 0.4)',
 		},
 	}),
-	menu: (provided) => ({
+	menu: (provided: any) => ({
 		...provided,
 		borderRadius: '16px',
 		border: '1px solid rgba(212, 175, 55, 0.3)',
@@ -62,7 +55,7 @@ export const customSelectStyles: StylesConfig<OptionType, boolean> = {
 		zIndex: 1000,
 		marginTop: '8px',
 	}),
-	menuList: (provided) => ({
+	menuList: (provided: any) => ({
 		...provided,
 		padding: '8px 0',
 		'&::-webkit-scrollbar': {
@@ -80,7 +73,7 @@ export const customSelectStyles: StylesConfig<OptionType, boolean> = {
 			},
 		},
 	}),
-	groupHeading: (provided) => ({
+	groupHeading: (provided: any) => ({
 		...provided,
 		padding: '12px 20px 6px 20px',
 		fontSize: '11px',
@@ -92,7 +85,7 @@ export const customSelectStyles: StylesConfig<OptionType, boolean> = {
 		marginBottom: '4px',
 		fontFamily: 'inherit',
 	}),
-	dropdownIndicator: (provided, state) => ({
+	dropdownIndicator: (provided: any, state: any) => ({
 		...provided,
 		color: state.isFocused ? '#D4AF37' : 'rgba(245, 245, 245, 0.5)',
 		transition: 'all 0.2s ease',
@@ -104,17 +97,17 @@ export const customSelectStyles: StylesConfig<OptionType, boolean> = {
 	indicatorSeparator: () => ({
 		display: 'none',
 	}),
-	placeholder: (provided) => ({
+	placeholder: (provided: any) => ({
 		...provided,
 		color: 'rgba(245, 245, 245, 0.5)',
 		fontFamily: 'inherit',
 	}),
-	singleValue: (provided) => ({
+	singleValue: (provided: any) => ({
 		...provided,
 		color: '#F5F5F5',
 		fontFamily: 'inherit',
 	}),
-	clearIndicator: (provided) => ({
+	clearIndicator: (provided: any) => ({
 		...provided,
 		color: 'rgba(245, 245, 245, 0.5)',
 		transition: 'all 0.2s ease',
@@ -122,16 +115,16 @@ export const customSelectStyles: StylesConfig<OptionType, boolean> = {
 			color: '#e8a0a0',
 		},
 	}),
-	loadingIndicator: (provided) => ({
+	loadingIndicator: (provided: any) => ({
 		...provided,
 		color: '#D4AF37',
 	}),
-	loadingMessage: (provided) => ({
+	loadingMessage: (provided: any) => ({
 		...provided,
 		color: '#F5F5F5',
 		fontFamily: 'inherit',
 	}),
-	noOptionsMessage: (provided) => ({
+	noOptionsMessage: (provided: any) => ({
 		...provided,
 		color: 'rgba(245, 245, 245, 0.6)',
 		fontFamily: 'inherit',
