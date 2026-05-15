@@ -148,15 +148,12 @@ const Home: React.FC = () => {
 
     const message = `Ас саламу алайкум! Хочу оформить рассрочку:
 
-      • Товар: ${productName}
+      • Товар: ${productName.split(' — ')[0]}
       • Первый взнос: ${Number(payment).toLocaleString('ru-RU') + ' ₽'} 
       • Срок: ${time} мес.
       • Способ оплаты: ${paymentType == 'nal' ? "Наличный" : "Безналичный"}
       • Платёж в месяц: ${monthlyPrice} 
-      • Общая стоимость: ${totalPrice}
-      • Цена за 1 мл: ${pricePerVolume !== null 
-                ? pricePerVolume.toLocaleString('ru-RU', { minimumFractionDigits: 0 }) + ' ₽'
-                : '—'}`;
+      • Общая стоимость: ${totalPrice}`;
 
     const link = document.createElement('a');
     link.href = `https://wa.me/79627721490?text=${encodeURIComponent(message)}`;
